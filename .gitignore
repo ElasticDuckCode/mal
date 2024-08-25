@@ -24,3 +24,6 @@ old
 tmp/
 .xslt_mal_history
 zig-cache/
+
+# Jake ignore venv for python 3.12
+venv/
