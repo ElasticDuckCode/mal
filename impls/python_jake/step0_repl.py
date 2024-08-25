@@ -1,3 +1,8 @@
+import os
+import readline
+import atexit
+
+
 def mal_read(input):
     return input
 
@@ -7,7 +12,8 @@ def mal_eval(input):
 
 
 def mal_print(input):
-    return input
+    print(input)
+    return
 
 
 def mal_rep(rep_input):
@@ -18,10 +24,32 @@ def mal_rep(rep_input):
 
 
 def main():
-    while 1:
-        line = input("user> ")
-        result = mal_rep(line)
-        print(result)
+    # Create readline buffer for better repl interaction
+    histfile = os.path.join(os.path.expanduser('~'), ".mal_history")
+
+    try:
+        # If file doesn't exist, this would create it.
+        open(histfile, 'a').close()
+        readline.read_history_file(histfile)
+        readline.set_history_length(1_000)
+        readline.parse_and_bind("")
+    except FileNotFoundError:
+        pass
+
+    try:
+        while 1:
+            line = input("user> ")
+
+            if line == 'exit':
+                break
+
+            mal_rep(line)
+
+    except KeyboardInterrupt:
+        # Pass keyboard interupt after writing history file to disk.
+        pass
+
+    atexit.register(readline.write_history_file, histfile)
     return 0
 
 
